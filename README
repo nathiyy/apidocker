@@ -21,3 +21,28 @@ Isso inclui o arquivo principal da aplicação (como app.py) e qualquer outro m�
 
 2- PAYMENTS DOCKERFILE
 
+Estou usando a imagem oficial do PHP 8.1 no modo CLI.
+Ela já vem com o PHP instalado, então facilita pra rodar aplicações simples direto no container.
+FROM php:8.1-cli
+
+Aqui eu defino a pasta principal do container onde o projeto vai ficar.
+Tudo que for feito dentro do container vai acontecer nesse caminho.
+WORKDIR /var/www/html
+
+Copio todos os arquivos do meu projeto local pra dentro do container.
+Assim ele consegue rodar a aplicação certinho.
+COPY . .
+
+Indico que a aplicação vai rodar na porta 3003.
+Isso serve pra expor essa porta e permitir o acesso de fora.
+EXPOSE 3003
+
+Quando o container for iniciado, esse é o comando que vai rodar.
+Ele liga o servidor embutido do PHP, ouvindo a porta 3003 em qualquer IP (0.0.0.0), o que permite acessar a aplicação de fora do container também.
+CMD ["php", "-S", "0.0.0.0:3003"]
+
+
+3- PRODUCTS
+
+
+
