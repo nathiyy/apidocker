@@ -1,48 +1,68 @@
 1 - ORDER DOCKERFILE
- Estou utilizando a imagem oficial do Python 3.9 como base para o container.
- Essa imagem já vem com o interpretador Python instalado, o que facilita o processo e garante que estou partindo de um ambiente padronizado e confiável.
+# Estou utilizando a imagem oficial do Python 3.9 como base para o container.
+# Essa imagem já vem com o interpretador Python instalado, o que facilita o processo e garante que estou partindo de um ambiente padronizado e confiável.
 FROM python:3.9
 
-Aqui estou definindo o diretório de trabalho dentro do container.
-Isso significa que todos os comandos seguintes vão ser executados a partir dessa pasta.
-Isso ajuda a manter a organização dos arquivos dentro do container.
+# Aqui estou definindo o diretório de trabalho dentro do container.
+# Isso significa que todos os comandos seguintes vão ser executados a partir dessa pasta.
+# Isso ajuda a manter a organização dos arquivos dentro do container.
 WORKDIR /usr/src/app
 
-Copio o arquivo requirements.txt para dentro do container.
-Esse arquivo contém todas as bibliotecas que minha aplicação precisa para funcionar.
+# Copio o arquivo requirements.txt para dentro do container.
+# Esse arquivo contém todas as bibliotecas que minha aplicação precisa para funcionar.
 COPY requirements.txt ./
 
-Com o requirements.txt já copiado, agora instalo as dependências da aplicação.
-Uso o pip, o gerenciador de pacotes do Python, para fazer isso. Assim, garanto que o ambiente do container tenha tudo que meu app precisa.
+# Com o requirements.txt já copiado, agora instalo as dependências da aplicação.
+# Uso o pip, o gerenciador de pacotes do Python, para fazer isso. Assim, garanto que o ambiente do container tenha tudo que meu app precisa.
 RUN pip install -r requirements.txt
 
-Copio todos os arquivos da minha aplicação para o diretório de trabalho no container.
-Isso inclui o arquivo principal da aplicação (como app.py) e qualquer outro módulo necessário.
+# Copio todos os arquivos da minha aplicação para o diretório de trabalho no container.
+# Isso inclui o arquivo principal da aplicação (como app.py) e qualquer outro módulo necessário.
 
 2- PAYMENTS DOCKERFILE
 
-Estou usando a imagem oficial do PHP 8.1 no modo CLI.
-Ela já vem com o PHP instalado, então facilita pra rodar aplicações simples direto no container.
+# Estou usando a imagem oficial do PHP 8.1 no modo CLI.
+# Ela já vem com o PHP instalado, então facilita pra rodar aplicações simples direto no container.
 FROM php:8.1-cli
 
-Aqui eu defino a pasta principal do container onde o projeto vai ficar.
-Tudo que for feito dentro do container vai acontecer nesse caminho.
+# Aqui eu defino a pasta principal do container onde o projeto vai ficar.
+# Tudo que for feito dentro do container vai acontecer nesse caminho.
 WORKDIR /var/www/html
 
-Copio todos os arquivos do meu projeto local pra dentro do container.
-Assim ele consegue rodar a aplicação certinho.
+# Copio todos os arquivos do meu projeto local pra dentro do container.
+# Assim ele consegue rodar a aplicação certinho.
 COPY . .
 
-Indico que a aplicação vai rodar na porta 3003.
-Isso serve pra expor essa porta e permitir o acesso de fora.
+# Indico que a aplicação vai rodar na porta 3003.
+# Isso serve pra expor essa porta e permitir o acesso de fora.
 EXPOSE 3003
 
-Quando o container for iniciado, esse é o comando que vai rodar.
-Ele liga o servidor embutido do PHP, ouvindo a porta 3003 em qualquer IP (0.0.0.0), o que permite acessar a aplicação de fora do container também.
+# Quando o container for iniciado, esse é o comando que vai rodar.
+# Ele liga o servidor embutido do PHP, ouvindo a porta 3003 em qualquer IP (0.0.0.0), o que permite acessar a aplicação de fora do container também.
 CMD ["php", "-S", "0.0.0.0:3003"]
 
 
 3- PRODUCTS
 
+# Aqui eu tô usando a imagem oficial do Node.js, versão 18.
+# Ela já vem com o Node e o npm prontos pra usar, o que facilita bastante.
+FROM node:18
+
+# Defino o diretório principal dentro do container onde o projeto vai ficar.
+# Tudo vai rodar dentro dessa pasta.
+WORKDIR /usr/src/app
+
+# Copio os arquivos de dependência primeiro (package.json e package-lock.json, se tiver),
+# isso ajuda a aproveitar o cache do Docker e não instalar tudo de novo sempre.
+COPY package*.json ./
+
+# Instalo as dependências do projeto com o npm.
+RUN npm install
+
+# Agora copio o resto dos arquivos do projeto pro container.
+COPY . .
+
+# Quando o container iniciar, esse comando vai rodar o app com Node.js.
+CMD ["node", "app.js"]
 
 
