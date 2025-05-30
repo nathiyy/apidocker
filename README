@@ -1,1 +1,23 @@
-ioii
+1 - ORDER DOCKERFILE
+ Estou utilizando a imagem oficial do Python 3.9 como base para o container.
+ Essa imagem já vem com o interpretador Python instalado, o que facilita o processo e garante que estou partindo de um ambiente padronizado e confiável.
+FROM python:3.9
+
+Aqui estou definindo o diretório de trabalho dentro do container.
+Isso significa que todos os comandos seguintes vão ser executados a partir dessa pasta.
+Isso ajuda a manter a organização dos arquivos dentro do container.
+WORKDIR /usr/src/app
+
+Copio o arquivo requirements.txt para dentro do container.
+Esse arquivo contém todas as bibliotecas que minha aplicação precisa para funcionar.
+COPY requirements.txt ./
+
+Com o requirements.txt já copiado, agora instalo as dependências da aplicação.
+Uso o pip, o gerenciador de pacotes do Python, para fazer isso. Assim, garanto que o ambiente do container tenha tudo que meu app precisa.
+RUN pip install -r requirements.txt
+
+Copio todos os arquivos da minha aplicação para o diretório de trabalho no container.
+Isso inclui o arquivo principal da aplicação (como app.py) e qualquer outro módulo necessário.
+
+2- PAYMENTS DOCKERFILE
+
